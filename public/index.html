@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Treasure Box Music</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="container">
+    <!-- Treasure box -->
+    <div id="treasureBox">💎</div>
+
+    <!-- Player: hidden initially -->
+    <div id="player" style="display:none;">
+      <img id="cover" src="" alt="Cover">
+      <h2 id="songTitle"></h2>
+      <audio id="audio" controls></audio>
+      <pre id="lyrics"></pre>
+    </div>
+
+    <!-- Upload form -->
+    <div id="uploadForm">
+      <h3>Upload a Song</h3>
+      <form id="form">
+        <input type="text" name="title" placeholder="Song Title" required><br>
+        <input type="file" name="cover" accept="image/*" required><br>
+        <input type="file" name="song" accept="audio/*" required><br>
+        <textarea name="lyrics" placeholder="Lyrics (optional)"></textarea><br>
+        <button type="submit">Upload</button>
+      </form>
+    </div>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,39 @@
+body {
+  background: #000;
+  color: #fff;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+#container {
+  text-align: center;
+}
+
+#treasureBox {
+  font-size: 80px;
+  cursor: pointer;
+  color: purple;
+}
+
+#player img {
+  width: 300px;
+  margin-top: 20px;
+}
+
+#lyrics {
+  white-space: pre-wrap;
+  text-align: left;
+  margin: 20px auto;
+  width: 60%;
+  color: #ddd;
+}
+
+#uploadForm {
+  margin-top: 20px;
+  border: 1px solid purple;
+  padding: 20px;
+  border-radius: 10px;
+}
