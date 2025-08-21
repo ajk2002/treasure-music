@@ -1,39 +1,81 @@
+/* Base styles */
 body {
-  background: #000;
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #121212; /* Spotify black background */
   color: #fff;
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
 }
 
+/* Container for everything */
 #container {
   text-align: center;
 }
 
+/* Treasure box */
 #treasureBox {
   font-size: 80px;
   cursor: pointer;
-  color: purple;
+  transition: transform 0.3s;
+  margin-bottom: 30px;
+}
+#treasureBox:hover {
+  transform: scale(1.2);
 }
 
-#player img {
-  width: 300px;
-  margin-top: 20px;
-}
-
-#lyrics {
-  white-space: pre-wrap;
-  text-align: left;
-  margin: 20px auto;
-  width: 60%;
-  color: #ddd;
-}
-
+/* Upload form */
 #uploadForm {
-  margin-top: 20px;
-  border: 1px solid purple;
-  padding: 20px;
-  border-radius: 10px;
+  background: #1e1e1e;
+  padding: 25px;
+  border-radius: 12px;
+  border: 2px solid #9b59b6; /* purple border */
+  width: 300px;
+  margin: 0 auto;
+  box-shadow: 0 0 15px rgba(155, 89, 182, 0.5);
+}
+#uploadForm input,
+#uploadForm textarea,
+#uploadForm button {
+  width: 100%;
+  margin: 8px 0;
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #333;
+  background: #1e1e1e;
+  color: #fff;
+  font-size: 14px;
+}
+#uploadForm button {
+  background: #9b59b6;
+  border: none;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+#uploadForm button:hover {
+  background: #8e44ad;
+}
+
+/* Player */
+#player {
+  text-align: center;
+}
+#cover {
+  width: 250px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+}
+#audio {
+  width: 100%;
+  margin-bottom: 20px;
+}
+#lyrics {
+  text-align: left;
+  max-width: 400px;
+  margin: 0 auto;
+  font-size: 14px;
+  line-height: 1.5;
+  white-space: pre-wrap;
 }
