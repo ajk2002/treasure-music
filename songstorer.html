@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Treasure Box Music</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+      font-family: 'Roboto', sans-serif;
+      background-color: #121212;
+      color: #EDEDED;
+      padding-top: 50px;
+      transition: all 0.5s ease;
+    }
+
+    h1 {
+      margin-bottom: 30px;
+      color: #FFFFFF;
+      font-weight: 700;
+      font-size: 2rem;
+      transition: opacity 0.5s ease;
+    }
+
+    #treasureBoxContainer {
+      perspective: 600px;
+      transition: opacity 0.5s ease;
+    }
+
+    #treasureBox {
+      width: 180px;
+      height: 180px;
+      background: url('treasure.png') no-repeat center/contain;
+      cursor: pointer;
+      transform-style: preserve-3d;
+      transition: transform 1s;
+      position: relative;
+    }
+
+    #treasureBox.open {
+      transform: rotateX(60deg) rotateY(20deg);
+    }
+
+    #sparkle {
+      position: absolute;
+      top: -20px;
+      left: -20px;
+      width: 220px;
+      height: 220px;
+      pointer-events: none;
+      background: radial-gradient(circle, rgba(128,0,128,0.6) 0%, transparent 70%);
+      border-radius: 50%;
+      opacity: 0;
+      animation: sparkleAnim 0.5s forwards;
+    }
+
+    @keyframes sparkleAnim {
+      0% { opacity: 1; transform: scale(0.5) rotate(0deg); }
+      100% { opacity: 0; transform: scale(1.5) rotate(360deg); }
+    }
+
+    #player {
+      display: none;
+      margin-top: 30px;
+      text-align: center;
+      background-color: #1E1E1E;
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(128, 0, 128, 0.4);
+      max-width: 350px;
+      width: 90%;
+      transition: all 0.5s ease;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    #player.fullscreen {
+      width: 80%;
+      max-width: none;
+      height: 80vh;
+      border-radius: 20px;
+      padding: 40px;
+    }
+
+    #cover {
+      width: 250px;
+      height: 250px;
+      object-fit: cover;
+      margin-bottom: 15px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+      transition: all 0.5s ease;
+    }
+
+    #lyrics {
+      white-space: pre-wrap;
+      margin-top: 10px;
+      font-size: 16px;
+      color: #D3D3D3;
+      max-height: 200px;
+      overflow-y: hidden;
+      text-align: center;
+      transition: all 0.5s ease;
+    }
+
+    input, textarea {
+      margin-top: 15px;
+      display: block;
+      width: 300px;
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      background-color: #1E1E1E;
+      color: #EDEDED;
+      font-size: 14px;
+      transition: opacity 0.5s ease;
+    }
+
+    input::placeholder, textarea::placeholder {
+      color: #888;
+    }
+
+    audio {
+      width: 100%;
+      margin-top: 10px;
+      outline: none;
+    }
+  </style>
+</head>
+<body>
+
+  <h1 id="title">Click the Treasure Box!</h1>
+  <div id="treasureBoxContainer">
+    <div id="treasureBox"></div>
+  </div>
+
+  <div id="player">
+    <img id="cover" src="" alt="Cover Image">
+    <audio id="audio" controls></audio>
+    <div id="lyrics"></div>
+  </div>
+
+  <input type="file" id="songFile" accept="audio/*">
+  <input type="file" id="coverFile" accept="image/*">
+  <textarea id="lyricsInput" placeholder="Paste your lyrics here"></textarea>
+
+  <script>
+    const treasureBox = document.getElementById('treasureBox');
+    const player = document.getElementById('player');
+    const audio = document.getElementById('audio');
+    const cover = document.getElementById('cover');
+    const lyricsDiv = document.getElementById('lyrics');
+    const title = document.getElementById('title');
+    const treasureBoxContainer = document.getElementById('treasureBoxContainer');
+    const inputs = document.querySelectorAll('input, textarea');
+
+    let songURL = null;
+    let coverURL = null;
+    let lyricsText = "";
+
+    // File inputs
+    document.getElementById('songFile').addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file) songURL = URL.createObjectURL(file);
+    });
+
+    document.getElementById('coverFile').addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file) coverURL = URL.createObjectURL(file);
+    });
+
+    document.getElementById('lyricsInput').addEventListener('input', (e) => {
+      lyricsText = e.target.value;
+    });
+
+    treasureBox.addEventListener('click', () => {
+      if (!songURL) {
+        alert("Please upload a song first!");
+        return;
+      }
+
+      treasureBox.classList.add('open');
+
+      const sparkle = document.createElement('div');
+      sparkle.id = 'sparkle';
+      treasureBox.appendChild(sparkle);
+      setTimeout(() => sparkle.remove(), 500);
+
+      // Hide inputs and title
+      inputs.forEach(el => el.style.display = 'none');
+      title.style.display = 'none';
+      treasureBoxContainer.style.display = 'none';
+
+      // Show player and make fullscreen
+      player.style.display = 'flex';
+      player.classList.add('fullscreen');
+
+      audio.src = songURL;
+      cover.src = coverURL || '';
+      lyricsDiv.textContent = lyricsText;
+      audio.play();
+
+      // Start lyrics auto-scroll
+      startLyricsScroll();
+    });
+
+    function startLyricsScroll() {
+      const lyricsHeight = lyricsDiv.scrollHeight - lyricsDiv.clientHeight;
+      if (lyricsHeight <= 0) return; // no scrolling needed
+
+      const duration = audio.duration;
+      if (isNaN(duration) || duration === 0) {
+        audio.addEventListener('loadedmetadata', startLyricsScroll);
+        return;
+      }
+
+      const startTime = Date.now();
+      const scrollInterval = setInterval(() => {
+        const elapsed = (Date.now() - startTime) / 1000; // seconds
+        const progress = Math.min(elapsed / duration, 1);
+        lyricsDiv.scrollTop = lyricsHeight * progress;
+        if (progress >= 1) clearInterval(scrollInterval);
+      }, 100);
+    }
+  </script>
+</body>
+</html>
